@@ -74,6 +74,9 @@ public class UI extends JFrame{
 				String url = tfUrl.getText();
 				String savePath = tfSave.getText();
 				int thrdNum = Integer.valueOf(tfThrdCnt.getText());
+				DownloadeManager mgr = 
+						new DownloadeManager(url, savePath, thrdNum, UI.this);
+				mgr.startDownload();
 			}
 		});
 		
@@ -87,4 +90,13 @@ public class UI extends JFrame{
 		
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
+
+	public synchronized void updateProgressBar(int len) {
+		pbar.setValue(pbar.getValue() + len);
+	}
+
+	public void setProgressBarMax(int totalContentLength) {
+		pbar.setMaximum(totalContentLength);
+	}
+	
 }
