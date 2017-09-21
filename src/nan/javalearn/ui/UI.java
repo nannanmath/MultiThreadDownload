@@ -21,8 +21,15 @@ public class UI extends JFrame{
 	private JTextField tfThrdCnt = null;
 	// Button to start download.
 	private JButton btnStart = null;
+	// Button to pause download.
+	private JButton btnPause = null;
 	// Progress bar
 	private JProgressBar pbar = null;
+	// Status.
+	private JLabel lblStatus = null;
+	
+	// Pause flag.
+	private boolean flagPause = false;
 	
 	public UI() {
 		init();
@@ -77,6 +84,21 @@ public class UI extends JFrame{
 				DownloadeManager mgr = 
 						new DownloadeManager(url, savePath, thrdNum, UI.this);
 				mgr.startDownload();
+				lblStatus.setText("Downloading ...");
+			}
+		});
+		
+		// Button for pause.
+		btnPause = new JButton();
+		btnPause.setBounds(105, 120, 80, 30);
+		btnPause.setText("Pause");
+		this.add(btnPause);
+		// Button Event.
+		btnPause.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				flagPause = !flagPause;
+				btnPause.setText(flagPause == true ? "Continue" : "Pause");
+				lblStatus.setText(flagPause == true ? "Pause ..." : "Downloading ...");
 			}
 		});
 		
@@ -85,6 +107,12 @@ public class UI extends JFrame{
 		pbar.setBounds(50, 155, 500, 20);
 		this.add(pbar);
 		
+		// Status.
+		lblStatus = new JLabel();
+		lblStatus.setBounds(50, 180, 200, 30);
+		lblStatus.setText("Click 'Start' to download.");
+		this.add(lblStatus);
+		
 		
 		this.setVisible(true);
 		
@@ -92,7 +120,16 @@ public class UI extends JFrame{
 	}
 
 	public synchronized void updateProgressBar(int len) {
-		pbar.setValue(pbar.getValue() + len);
+		int length = pbar.getValue() + len;
+		pbar.setValue(length);
+		if(length >= pbar.getMaximum()){
+			lblStatus.setText("Download Complete!");
+			pbar.setValue(0);
+		}
+	}
+
+	public boolean isFlagPause() {
+		return flagPause;
 	}
 
 	public void setProgressBarMax(int totalContentLength) {
