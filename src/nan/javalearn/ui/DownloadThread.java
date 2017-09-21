@@ -27,6 +27,10 @@ public class DownloadThread extends Thread{
 			while((len = is.read(buf)) !=  -1) {
 				raf.write(buf, 0, len);
 				ui.updateProgressBar(len);
+				
+				while(ui.isFlagPause()){
+					Thread.sleep(500);
+				}
 			}
 			is.close();
 			raf.close();
