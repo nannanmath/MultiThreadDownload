@@ -1,6 +1,7 @@
 package nan.javalearn.ui;
 
 public class DownloadInfo {
+	private int index;
 	private String urlStr;
 	private String savePath;
 	private int startPos;
@@ -8,12 +9,20 @@ public class DownloadInfo {
 	
 	public DownloadInfo(){}
 
-	public DownloadInfo(String urlStr, String savePath, int startPos, int endPos) {
-		super();
+	public DownloadInfo(int index, String urlStr, String savePath, int startPos, int endPos) {
+		this.index = index;
 		this.urlStr = urlStr;
 		this.savePath = savePath;
 		this.startPos = startPos;
 		this.endPos = endPos;
+	}
+
+	public int getIndex() {
+		return index;
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
 	}
 
 	public String getUrlStr() {

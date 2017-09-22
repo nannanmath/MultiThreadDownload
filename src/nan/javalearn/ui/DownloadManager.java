@@ -6,7 +6,7 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DownloadeManager {
+public class DownloadManager {
 	private String urlStr;
 	private String savePath;
 	private int thrdCount;
@@ -15,15 +15,16 @@ public class DownloadeManager {
 	
 	private List<DownloadInfo> infos = new ArrayList<DownloadInfo>();
 	
-	public DownloadeManager(){}
+	public DownloadManager(){}
 
-	public DownloadeManager(String urlStr, String savePath, int thrdCount, UI ui) {
+	public DownloadManager(String urlStr, String savePath, int thrdCount, UI ui) {
 		this.urlStr = urlStr;
 		this.savePath = savePath;
 		this.thrdCount = thrdCount;
 		this.ui = ui;
 		
 		prepareDownload();
+		ui.addProgressBar(infos);
 	}
 
 	/**
@@ -35,7 +36,7 @@ public class DownloadeManager {
 			URLConnection conn = url.openConnection();
 			totalContentLength = conn.getContentLength();
 			// Set progress bar max length.
-			ui.setProgressBarMax(totalContentLength);
+			//sui.setProgressBarMax(totalContentLength);
 			
 			// Create file for downloading.
 			RandomAccessFile raf = new RandomAccessFile(savePath, "rw");
@@ -57,6 +58,7 @@ public class DownloadeManager {
 				}
 				
 				DownloadInfo info = new DownloadInfo();
+				info.setIndex(i);
 				info.setUrlStr(urlStr);
 				info.setSavePath(savePath);
 				info.setStartPos(startPos);
@@ -73,6 +75,7 @@ public class DownloadeManager {
 	 * Start to download with multi threads.
 	 */
 	public void startDownload() {
+		
 		for (DownloadInfo info : infos) {
 			new DownloadThread(info, ui).start();
 		}
